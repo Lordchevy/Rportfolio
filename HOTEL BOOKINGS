@@ -1,0 +1,74 @@
+# Install neccessary packages
+install.packages("tidyverse")
+install.packages("skimr")
+install.packages("janitor")
+install.packages('ggplot2')
+
+
+# load packages
+library(tidyverse)
+library(skimr)
+library(janitor)
+library(ggplot2)
+
+
+# load dataset
+hotel_bookings <- read_csv("hotel_bookings.csv")
+
+# get the column names from data
+colnames(hotel_bookings)
+
+
+# arrange function in descending order
+arrange(hotel_bookings, desc(lead_time))
+
+
+# create a new data frame
+hotel_bookings_v2 <-
+  arrange(hotel_bookings, desc(lead_time))
+
+#mean part two
+mean(hotel_bookings_v2$lead_time)
+
+hotel_bookings_city <-
+filter(hotel_bookings, hotel_bookings$hotel=="City Hotel")
+
+# new dataset}
+head(hotel_bookings_city)
+
+
+# average lead time city hotels
+mean(hotel_bookings_city$lead_time)
+
+
+# group and summarize
+hotel_summary <- 
+  hotel_bookings %>%
+  group_by(hotel) %>%
+  summarise(average_lead_time=mean(lead_time),
+            min_lead_time=min(lead_time),
+            max_lead_time=max(lead_time))
+
+head(hotel_summary)
+
+
+ggplot(data = hotel_bookings) +
+  geom_bar(mapping = aes(x = distribution_channel))
+
+
+
+ggplot(data = hotel_bookings) +
+  geom_bar(mapping = aes(x = distribution_channel, fill=market_segment ))
+
+
+ggplot(data = hotel_bookings) +
+  geom_bar(mapping = aes(x = distribution_channel)) +
+  facet_wrap(~ deposit_type )
+
+
+
+#r creating a plot with rotated labels
+ggplot(data = hotel_bookings) +
+  geom_bar(mapping = aes(x = distribution_channel)) +
+  facet_wrap(~deposit_type) +
+  theme(axis.text.x = element_text(angle = 45))
